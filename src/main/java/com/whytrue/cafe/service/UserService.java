@@ -62,19 +62,21 @@ public class UserService implements UserDetailsService {
   }
 
   public boolean update(User user, UUID id, Principal principal) {
+    User userFromDB = null;
     if (user == null || id == null || principal == null ||
-        !userRepository.existsById(id) ||
+        (userFromDB = userRepository.findById(id).orElse(null)) == null ||
         userRepository.existsByUsername(user.getUsername()) && !user.getUsername().equals(principal.getName())) {
       return false;
     }
 
     User curUser = userRepository.findByUsername(principal.getName());
-    if (!curUser.getRoles().contains(new Role(3L, "ADMIN")) && !id.equals(curUser.getId())) {
+    if (!curUser.getRoles().contains(new Role(3L, "ROLE_ADMIN")) && !id.equals(curUser.getId())) {
       return false;
     }
 
     user.setId(id);
     user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+    user.setRoles(userFromDB.getRoles());
     userRepository.save(user);
     return true;
   }

@@ -1,6 +1,7 @@
 package com.whytrue.cafe.service;
 
 import com.whytrue.cafe.entity.Product;
+import com.whytrue.cafe.entity.ProductCategory;
 import com.whytrue.cafe.repository.ProductCategoryRepository;
 import com.whytrue.cafe.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,10 @@ public class ProductService {
     return productRepository.findAll();
   }
 
+  public List<Product> readAll(ProductCategory category) {
+    return productRepository.findAllByProductCategory(category);
+  }
+
   public boolean update(Product product, Long id) {
     if (product == null || id == null ||
         product.getProductCategory() == null || !productCategoryRepository.existsById(product.getProductCategory().getId()) ||
@@ -46,7 +51,8 @@ public class ProductService {
   public boolean updateStatus(Long id, Boolean isActive) {
     Product productFromDB = null;
     if (id == null || isActive == null ||
-        (productFromDB = productRepository.findById(id).orElse(null)) == null
+        (productFromDB = productRepository.findById(id).orElse(null)) == null ||
+        (productFromDB.getQuantity() != null && productFromDB.getQuantity() == 0)
     ) {
       return false;
     }

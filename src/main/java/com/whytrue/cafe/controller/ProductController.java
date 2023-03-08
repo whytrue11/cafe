@@ -1,6 +1,8 @@
 package com.whytrue.cafe.controller;
 
 import com.whytrue.cafe.entity.Product;
+import com.whytrue.cafe.entity.ProductCategory;
+import com.whytrue.cafe.repository.ProductCategoryRepository;
 import com.whytrue.cafe.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,8 @@ public class ProductController {
 
   @Autowired
   private ProductService productService;
+  @Autowired
+  private ProductCategoryRepository productCategoryRepository;
 
   @PostMapping()
   public ResponseEntity<?> create(@RequestBody @Validated Product product, BindingResult bindingResult) {
@@ -33,6 +37,20 @@ public class ProductController {
   @GetMapping("/products")
   public ResponseEntity<List<Product>> readAll() {
     final List<Product> products = productService.readAll();
+
+    return products != null
+        ? new ResponseEntity<>(products, HttpStatus.OK)
+        : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+  }
+
+  @GetMapping("/products/{category}")
+  public ResponseEntity<List<Product>> readAll(@PathVariable(name = "category") String categoryStr) {
+    ProductCategory category = productCategoryRepository.findByName(categoryStr);
+
+    List<Product> products = null;
+    if (category != null) {
+      products = productService.readAll(category);
+    }
 
     return products != null
         ? new ResponseEntity<>(products, HttpStatus.OK)

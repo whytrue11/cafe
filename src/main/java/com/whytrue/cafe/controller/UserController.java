@@ -55,7 +55,7 @@ public class UserController {
   }
 
   @GetMapping("/{role}")
-  public ResponseEntity<?> readAll(@PathVariable(name = "role") String roleStr) {
+  public ResponseEntity<List<User>> readAll(@PathVariable(name = "role") String roleStr) {
     Role role = switch (roleStr) {
       case "users" -> new Role(1L, "ROLE_USER");
       case "employees" -> new Role(2L, "ROLE_EMPLOYEE");

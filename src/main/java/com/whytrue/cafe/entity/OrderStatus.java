@@ -11,7 +11,8 @@ import lombok.*;
 @EqualsAndHashCode
 public class OrderStatus {
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_status_generator")
+  @SequenceGenerator(name = "order_status_generator", sequenceName = "order_statuses_seq", allocationSize = 1)
   private Long id;
   @NotNull @Column(unique = true)
   private String name;

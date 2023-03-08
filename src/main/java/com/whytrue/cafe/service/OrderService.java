@@ -69,13 +69,14 @@ public class OrderService {
     return orderRepository.findAllByOrderStatus(status);
   }
 
-  public boolean updateStatus(Long orderId, OrderStatus status) {
+  public boolean updateStatus(Long orderId, String statusStr) {
     Order order = null;
-    if (orderId == null || status == null ||
+    OrderStatus status = null;
+    if (orderId == null || statusStr == null ||
         //order existing
         (order = orderRepository.findById(orderId).orElse(null)) == null ||
         //status existing
-        status.getId() == null || (status = orderStatusRepository.findById(status.getId()).orElse(null)) == null) {
+        (status = orderStatusRepository.findByName(statusStr)) == null) {
       return false;
     }
 
@@ -102,8 +103,14 @@ public class OrderService {
         break;
       }
       case "SUCCESS":
+        if (!order.getOrderStatus().equals(statuses.get(1))) {
+          return false;
+        }
         break;
-      case "REJECT": {
+      case "REJECTED": {
+        if (order.getOrderStatus().equals(statuses.get(0))) {
+          break;
+        }
         if (!order.getOrderStatus().equals(statuses.get(1))) {
           return false;
         }

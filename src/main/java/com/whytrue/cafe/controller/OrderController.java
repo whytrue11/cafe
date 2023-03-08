@@ -57,7 +57,8 @@ public class OrderController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<?> updateStatus(@PathVariable(name = "id") Long id, @RequestBody OrderStatus status) {
+  public ResponseEntity<?> updateStatus(@PathVariable(name = "id") Long id,
+                                        @RequestParam(value = "status") String status) {
     if (!orderService.updateStatus(id, status)) {
       return new ResponseEntity<>(HttpStatus.CONFLICT);
     }

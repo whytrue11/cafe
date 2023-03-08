@@ -17,4 +17,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
   @Modifying
   @Query("UPDATE Product p SET p.productCategory = :to where p.productCategory = :from")
   void setAllCategories(@Param("from") ProductCategory from, @Param("to") ProductCategory to);
+
+  List<Product> findAllByProductCategory(ProductCategory category);
 }

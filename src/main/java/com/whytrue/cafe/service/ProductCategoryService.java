@@ -39,7 +39,8 @@ public class ProductCategoryService {
   public boolean update(ProductCategory category, Long id) {
     if (category == null || id == null ||
         !productCategoryRepository.existsById(id) ||
-        productCategoryRepository.existsByName(category.getName())) {
+        productCategoryRepository.existsByName(category.getName()) ||
+        id.equals(defaultCategory.getId())) {
       return false;
     }
 

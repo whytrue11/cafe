@@ -1,0 +1,2 @@
+DELETE FROM products WHERE id = 8;
+ALTER SEQUENCE products_seq RESTART WITH 8;

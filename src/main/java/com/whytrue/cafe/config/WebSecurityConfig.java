@@ -42,11 +42,12 @@ public class WebSecurityConfig {
         .requestMatchers("/user/employees").hasRole("ADMIN")
         .requestMatchers("/user/admins").hasRole("ADMIN")
 
-        .requestMatchers("/product_category/categories").authenticated()
+        .requestMatchers("/product_category/categories").permitAll()
         .requestMatchers("/product_category").hasRole("ADMIN")
         .requestMatchers("/product_category/*").hasRole("ADMIN")
 
-        .requestMatchers("/product/products").authenticated()
+        .requestMatchers("/product/products").permitAll()
+        .requestMatchers("/product/products/*").permitAll()
         .requestMatchers("/product/status/*").hasAnyRole("EMPLOYEE" ,"ADMIN")
         .requestMatchers("/product/*").hasRole("ADMIN")
 
